@@ -46,12 +46,12 @@ public class Lantern extends JavaPlugin implements Listener {
 
 	
 	public void onEnable(){
-		getLogger().info("Your plugin has been enabled!");
+		getLogger().info("Lantern 0.1 has been enabled!");
 		getServer().getPluginManager().registerEvents(this, this);
 	}
  
 	public void onDisable(){
-		getLogger().info("Your plugin has been disabled.");
+		getLogger().info("Lantern 0.1 has been disabled.");
 	}  
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
@@ -81,11 +81,19 @@ public class Lantern extends JavaPlugin implements Listener {
 				Player p = evt.getPlayer();
 				if (p.hasPermission("lantern.use"))
 				{
-					
-				
 				
 				loc.setY(loc.getY() - 1);
-
+				
+				
+				//Added this bit in to make the lantern still work while jumping or falling.
+				while (w.getBlockAt(loc).getType()==Material.AIR)
+				{
+					//getLogger().info("In loop");
+					loc.setY(loc.getY() - 1);
+				}
+				
+				try { 
+					 
 				if(previousLoc.containsKey(p)){
 					if(!signData.containsKey(p)){
 						p.sendBlockChange(previousLoc.get(p), previousBlock.get(p), (byte)previousBlockData.get(p));
@@ -100,6 +108,12 @@ public class Lantern extends JavaPlugin implements Listener {
 						signData.remove(p);
 					}
 				}		
+				}
+				catch (ClassCastException e)
+				{
+					
+					
+				}
 
 
 				if(w.getBlockAt(loc).getType() != Material.AIR && w.getBlockAt(loc).getType() != Material.WATER){
